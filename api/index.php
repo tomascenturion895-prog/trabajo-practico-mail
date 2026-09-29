@@ -14,6 +14,23 @@ $_ENV['APP_DEBUG'] = $_SERVER['APP_DEBUG'] = 'true';
 ini_set('display_errors', '1');
 error_reporting(E_ALL);
 
+// Ruta de diagnóstico: /__env muestra qué variables llegan (secretos solo como "definida"/"vacía").
+if (strpos($_SERVER['REQUEST_URI'] ?? '', '/__env') === 0) {
+    header('Content-Type: text/plain; charset=utf-8');
+    $visibles = ['APP_ENV','APP_DEBUG','APP_URL','MAIL_MAILER','MAIL_HOST','MAIL_PORT','MAIL_USERNAME','MAIL_FROM_ADDRESS','MAIL_FROM_NAME','DB_CONNECTION','DB_HOST','DB_PORT','DB_DATABASE','DB_USERNAME','MYSQL_ATTR_SSL_CA','SESSION_DRIVER','QUEUE_CONNECTION'];
+    $secretas = ['APP_KEY','MAIL_PASSWORD','DB_PASSWORD'];
+    foreach ($visibles as $n) {
+        $v = getenv($n);
+        echo str_pad($n, 22) . ($v === false ? 'NO LLEGA' : ($v === '' ? '(vacía)' : $v)) . "\n";
+    }
+    foreach ($secretas as $n) {
+        $v = getenv($n);
+        echo str_pad($n, 22) . ($v === false ? 'NO LLEGA' : ($v === '' ? '(vacía)' : 'definida (' . strlen($v) . ' caracteres)')) . "\n";
+    }
+    echo "\ncerts/cacert.pem existe: " . (file_exists(__DIR__ . '/../certs/cacert.pem') ? 'SI' : 'NO') . "\n";
+    exit;
+}
+
 // Si APP_KEY no llega a la función, mostrar qué variables (solo NOMBRES, nunca valores) sí llegan.
 if (! getenv('APP_KEY')) {
     http_response_code(500);
