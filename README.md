@@ -36,3 +36,12 @@ php artisan test --filter=MailTest
 
 ## Colas – comandos útiles
 `php artisan queue:failed` · `php artisan queue:retry {id}` · `php artisan queue:retry all`
+
+## Despliegue en Vercel
+
+Usa el runtime de la comunidad `vercel-php@0.8.0` (PHP 8.4). Archivos: `vercel.json`, `api/index.php`, `.vercelignore`.
+
+Variables de entorno necesarias en Vercel (Settings → Environment Variables):
+`APP_KEY`, `APP_ENV=production`, `APP_DEBUG=false`, `APP_URL`, `LOG_CHANNEL=stderr`,
+`SESSION_DRIVER=cookie`, `CACHE_STORE=array`, `QUEUE_CONNECTION=sync`,
+`MAIL_*` (Brevo) y `DB_*` (base MySQL en la nube; el MySQL local no es accesible desde Vercel).
