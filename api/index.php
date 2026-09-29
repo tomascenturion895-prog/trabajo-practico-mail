@@ -13,6 +13,16 @@ putenv('APP_DEBUG=true');
 $_ENV['APP_DEBUG'] = $_SERVER['APP_DEBUG'] = 'true';
 ini_set('display_errors', '1');
 error_reporting(E_ALL);
+
+// Si APP_KEY no llega a la función, mostrar qué variables (solo NOMBRES, nunca valores) sí llegan.
+if (! getenv('APP_KEY')) {
+    http_response_code(500);
+    header('Content-Type: text/plain; charset=utf-8');
+    $nombres = array_keys(getenv());
+    sort($nombres);
+    echo "APP_KEY NO llega a la función.\n\nVariables recibidas (solo nombres):\n- " . implode("\n- ", $nombres);
+    exit;
+}
 // >>> FIN DIAGNÓSTICO <<<
 
 define('LARAVEL_START', microtime(true));
