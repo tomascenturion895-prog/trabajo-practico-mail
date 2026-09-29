@@ -14,6 +14,10 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
         // Vercel corre detrás de un proxy: confiar en él para detectar HTTPS y el host real.
         $middleware->trustProxies(at: '*');
+
+        // Invitados que entran a rutas protegidas -> /login; usuarios logueados que van a /login -> historial.
+        $middleware->redirectGuestsTo(fn () => route('login'));
+        $middleware->redirectUsersTo(fn () => route('historial.index'));
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->shouldRenderJsonWhen(

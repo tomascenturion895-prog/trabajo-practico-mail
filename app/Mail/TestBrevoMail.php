@@ -14,17 +14,29 @@ class TestBrevoMail extends Mailable
     public $asunto;
     public $mensaje;
 
-    public function __construct($nombre, $asunto, $mensaje)
+    /** @var array<int, array{path: string, name: string, mime: ?string}> */
+    public array $adjuntos;
+
+    public function __construct($nombre, $asunto, $mensaje, array $adjuntos = [])
     {
         $this->nombre = $nombre;
         $this->asunto = $asunto;
         $this->mensaje = $mensaje;
+        $this->adjuntos = $adjuntos;
     }
 
     public function build()
     {
-        return $this
-            ->subject($this->asunto)
+        $mail = $this->subject($this->asunto)
             ->view('emails.test-brevo');
+
+        foreach ($this->adjuntos as $adjunto) {
+            $mail->attach($adjunto['path'], array_filter([
+                'as' => $adjunto['name'],
+                'mime' => $adjunto['mime'] ?? null,
+            ]));
+        }
+
+        return $mail;
     }
 }

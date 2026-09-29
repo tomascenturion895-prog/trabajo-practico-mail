@@ -37,6 +37,7 @@ class RegisterController extends Controller
         SendWelcomeEmailJob::dispatch($user);
 
         // 4. Retornar respuesta exitosa
-        return back()->with('success', '¡Usuario registrado con éxito! Correo de bienvenida enviado.');
+        return redirect()->route('login')
+            ->with('success', '¡Usuario registrado con éxito! Te enviamos un correo de bienvenida. Ya podés iniciar sesión.');
     }
 }

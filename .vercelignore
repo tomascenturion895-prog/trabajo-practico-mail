@@ -9,3 +9,4 @@ storage/framework
 database/database.sqlite
 _proyecto.zip
 .phpunit.result.cache
+vercel-env-importar.txt

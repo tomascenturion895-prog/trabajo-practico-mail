@@ -2,12 +2,15 @@
 
 namespace Tests\Feature;
 
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\TestBrevoMail;
 
 class MailTest extends TestCase
 {
+    use RefreshDatabase;
+
     // Test N.° 1 — Comprobar que el formulario funciona
     public function test_formulario_mail_se_muestra_correctamente(): void
     {
